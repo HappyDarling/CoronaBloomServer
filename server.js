@@ -22,7 +22,7 @@ app.post("/", (req, res) => {
     // 만약 SNS와 account가 동일한 사람이 없다면 새로 생성, 있다면 Update
     models.userAuth
       .findOne({ where: { SNS: SNS, account: account } })
-      .then(() => {
+      .then((user) => {
         user
           .update({ SNS: SNS, account: account, auth: auth })
           .then(() => console.log("Data Update Success ✓"))
@@ -40,6 +40,32 @@ app.post("/", (req, res) => {
       auth: auth,
     });
   }
+});
+
+app.post("/result", (req, res) => {
+  const body = req.body;
+  const { SNS, account, auth } = body;
+  if (!SNS || !account || !auth) {
+    // 방어 코드 (SNS, account, auth가 비어있을 경우)
+    res.send({
+      Code: 1,
+      Title: "Error",
+      Message: "비정상적인 접근입니다",
+    });
+  }
+  models.userAuth
+    .findOne({ where: { SNS: SNS, account: account } })
+    .then((user) => {
+      if (user.dataValues.auth !== auth) {
+        res.send({
+          Code: 2,
+          Title: "Error",
+          Message:
+            "입력한 정보와 인증키가 일치하지 않습니다. 다시 시도해주세요.",
+        });
+      }
+    })
+    .catch(() => {});
 });
 
 app.listen(port, function () {
