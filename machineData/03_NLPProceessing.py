@@ -5,6 +5,8 @@ from konlpy.tag import Okt
 # 3. tweepy 3.7.0 ~ 3.10.0 사이의 버전으로 설치
 # 4. konlpy 설치
 
+okt = Okt() # Okt 모듈을 사용하기 위한 처리
+
 # 불용어 처리 (StopWords)
 # https://github.com/hexists/test_konlpy.git [./stopwords/stopwords.word.txt] 사용
 with open('./StopWords/stopwords.word.txt', 'r', encoding='UTF-8') as fp:
@@ -20,6 +22,6 @@ stopwords = stopwords_Lib + ['도', '게', '만', '께', '는', '수', '은', '�
 # 불용어를 제외하고 문장을 단어 단위로 구분한 이차원 배열 리스트 생성
 X_train = []
 for sentence in train_data['Conv']: # 모든 훈련 데이터셋 Loop
-    temp_X = okt.morphs(sentence, stem=True) # 토큰화
+    temp_X = Okt.morphs(sentence, stem=True) # 토큰화
     temp_X = [word for word in temp_X if not word in stopwords] # 불용어 제거
     X_train.append(temp_X) # X_train 리스트에 데이터 추가
