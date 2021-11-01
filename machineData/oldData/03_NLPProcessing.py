@@ -1,5 +1,5 @@
 from konlpy.tag import Okt 
-# NLP 처리할 때 Konlpy 모듈 사용
+# NLP 처리할 때 Konlpy 모듈 사용 (이하의 순서를 반드시 지켜야한다.)
 # 1. JAVA 설치 후 환경변수 등록
 # 2. 파이썬 버전 확인 후 Jpype 모듈 설치
 # 3. tweepy 3.7.0 ~ 3.10.0 사이의 버전으로 설치
@@ -20,8 +20,9 @@ for ct in range(len(stopwords_Lib)):
 stopwords = stopwords_Lib + ['도', '게', '만', '께', '는', '수', '은', '거', '고', '이니', '런가', '엔', '서']
 
 # 불용어를 제외하고 문장을 단어 단위로 구분한 이차원 배열 리스트 생성
-X_train = []
+trainData = []
 for sentence in train_data['Conv']: # 모든 훈련 데이터셋 Loop
-    temp_X = Okt.morphs(sentence, stem=True) # 토큰화
-    temp_X = [word for word in temp_X if not word in stopwords] # 불용어 제거
-    X_train.append(temp_X) # X_train 리스트에 데이터 추가
+    # Okt의 morphs 모듈을 사용하여 토큰화, 속성 중 stem을 이용하여 단어 정규화
+    rootWord = okt.morphs(sentence, stem=True)
+    rootWord = [word for word in rootWord if not word in stopwords] # 불용어 제거
+    trainData.append(rootWord)
