@@ -21,3 +21,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Out-Link
+/ML/stopWords/stopwords.word.txt
+/NLP_DATA/token.json

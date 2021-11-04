@@ -2,6 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const models = require("./models");
 const rs = require("./module/randomString.js");
+const NLP = require("./module/NLPProcessingModule.js");
+
 const app = express();
 const port = 8080;
 
@@ -68,8 +70,6 @@ app.post("/result", (req, res) => {
             "입력한 정보와 인증키가 일치하지 않습니다. 다시 시도해주세요.",
         });
       }
-      // 여기서부터
-      // 이제 인증키 전부 맞은걸 확인했으니 머신러닝 모듈 파트를 구현해야 함
     })
     .catch(() => {});
 });
