@@ -23,8 +23,9 @@ from konlpy.tag import Okt
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 
-with open('NLP_DATA/myConv.json', 'r', encoding='UTF-8') as fp:
-    conv = json.load(fp)
+# 디버그를 위해 JS거치지 않고 바로 실행하기 위한 open
+# with open('NLP_DATA/myConv.json', 'r', encoding='UTF-8') as fp:
+#     conv = json.load(fp)
 
 with open('NLP_DATA/token.json', 'r', encoding='UTF-8') as fp:
     token = json.load(fp)
@@ -53,7 +54,7 @@ def sentiment_predict(rootword, i):
     pad_new = pad_sequences(encoded, maxlen = 15) # 패딩
     res[i].append(pad_new.tolist())
 
-# conv = json.loads(sys.argv[1])['conv']
+conv = json.loads(sys.argv[1])['conv']
 userConv = conv["userConv"]
 
 res = {} # Return DICT
