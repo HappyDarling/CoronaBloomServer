@@ -58,3 +58,5 @@ function predict(ct) {
 }
 
 tokenizer();
+
+module.exports = { ctJson };

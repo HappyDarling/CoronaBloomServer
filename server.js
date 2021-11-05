@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const models = require("./models");
-const NLP = require("./module/NLPProcessingModule.js");
+const { ctJson } = require("./module/NLPProcessingModule.js");
 const rs = require("./module/randomString.js");
 const conv = require("./NLP_DATA/myConv.json");
 
@@ -70,9 +70,8 @@ app.post("/result", (req, res) => {
             "입력한 정보와 인증키가 일치하지 않습니다. 다시 시도해주세요.",
         });
       }
-      NLP.tokenizer("d");
       res.send({
-        predict: "",
+        predict: ctJson,
         conv: conv,
       });
     })
