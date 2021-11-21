@@ -5,7 +5,6 @@
 
 const { PythonShell } = require("python-shell");
 const tf = require("@tensorflow/tfjs");
-const conv = require("../NLP_DATA/myConv.json"); // JSON 데이터로 되어있는 대화문을 변수에 할당
 
 // JS에서 L2 Norm을 사용하기 위해 클래스를 따로 정의
 class L2 {
@@ -28,35 +27,36 @@ async function loadModel() {
 }
 loadModel();
 
-function tokenizer() {
-  var convToken;
-
-  // 자연어 처리를 하기 위해 분석할 대화문을 토큰화
-  var options = {
-    args: [JSON.stringify({ conv })],
-  };
-
-  PythonShell.run("module/NLPTokenizer.py", options, function (err, data) {
-    if (err) throw err;
-    convToken = JSON.parse(data);
-    predict(convToken);
+function tokenizer(conv) {
+  return new Promise((resolve, reject) => {
+    // 자연어 처리를 하기 위해 분석할 대화문을 토큰화
+    var options = {
+      args: [JSON.stringify({ conv })],
+    };
+    PythonShell.run("module/NLPTokenizer.py", options, function (err, data) {
+      if (err) throw err;
+      convToken = JSON.parse(data);
+      resolve(convToken);
+    });
   });
 }
 
-let ctJson = new Object(); // 예측값을 받아올 변수
-
-function predict(ct) {
-  for (i in ct) {
-    pre = [];
-    for (j of ct[i]) {
-      pre.push(model.predict(tf.tensor(j)).dataSync()[0]);
+function predict(convToken) {
+  let ctJson = new Object(); // 예측값을 받아올 변수
+  return new Promise((resolve, reject) => {
+    for (i in convToken) {
+      pre = [];
+      for (j of convToken[i]) {
+        pre.push(model.predict(tf.tensor(j)).dataSync()[0]);
+      }
+      ctJson[i] = new Array();
+      ctJson[i].push(pre);
     }
-    ctJson[i] = new Array();
-    ctJson[i].push(pre);
-  }
-  console.log(ctJson);
+    resolve(ctJson);
+  });
 }
 
-tokenizer();
-
-module.exports = { ctJson };
+module.exports = {
+  tokenizer,
+  predict,
+};
